@@ -1,0 +1,4 @@
+cat qq | ./podcast_cuter > zz 2> rmlist
+ffmpeg -ac 1 -f s16le -ar 44100 -i zz kk.wav
+ffmpeg -i lesson45.mp4 -f yuv4mpegpipe - | ./frame_remover | ffmpeg -f yuv4mpegpipe -i - -vcodec libx264 -b 4000k -threads 8 les.mp4
+ffmpeg -i les.mp4 -i kk.wav -map 0:0 -map 1:0 -vcodec copy -ab 256k les_aud.mp4
