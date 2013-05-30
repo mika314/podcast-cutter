@@ -1,32 +1,40 @@
-#include "real_fft.h"
 #include <iostream>
 #include <deque>
 #include <vector>
+#include <cmath>
 using namespace std;
 
-enum { BuffSize = 2 * 44100 };
+enum { BuffSize = 44100 / 8};
 
 
 int main()
 {
     deque<short> d;
     int state = 0;
+    float averageVelosity = 0;
     long long fadeIn = 0;
     int s = 0;
     int start = -1;
     int end;
     short oldV = 0;
     short v = 0;
-    float averageVelosity = 0;
-    float oldAverageVelosity = 0;
+    short noizeLevel = 0;
+    int cutOff = 0;
     while (!cin.eof())
     {
         short v1;
         cin.read((char *)(&v1), sizeof(v1));
         d.push_back(v1);
 
-        averageVelosity = (averageVelosity * 999.0f + abs(d.back())) / 1000.0f;
-        if (abs(averageVelosity - oldAverageVelosity) > 5)
+        if (cutOff < 44100 * 10)
+        {
+            if (v1 > noizeLevel)
+                noizeLevel = v1;
+            ++cutOff;
+        }
+
+        averageVelosity = abs(d.back());
+        if (averageVelosity > noizeLevel * 115 / 100)
         {
             state = -1;
             if (fadeIn == -2)
@@ -84,7 +92,6 @@ int main()
                 }
             }
         }
-        oldAverageVelosity = averageVelosity;
         ++s;
         // if (s % 44100 == 0)
         //   clog << 1.0 * s / 44100 / 60 << endl;
