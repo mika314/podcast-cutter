@@ -21,10 +21,9 @@ int main()
     float oldAverageVelosity = 0;
     while (!cin.eof())
     {
-        short v1, v2;
+        short v1;
         cin.read((char *)(&v1), sizeof(v1));
-        cin.read((char *)(&v2), sizeof(v2));
-        d.push_back((v1 + v2) / 2);
+        d.push_back(v1);
 
         averageVelosity = (averageVelosity * 999.0f + abs(d.back())) / 1000.0f;
         if (abs(averageVelosity - oldAverageVelosity) > 5)
